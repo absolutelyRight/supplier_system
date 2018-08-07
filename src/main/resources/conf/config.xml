@@ -1,10 +1,15 @@
 <config>
     <base-package>hello</base-package>
+    <!--<properties>-->
+        <!--<property name="jdbc.driverClassName">com.mysql.jdbc.Driver</property>-->
+        <!--<property name="jdbc.url">jdbc:mysql://10.202.111.121:3306/supplier</property>-->
+        <!--<property name="jdbc.username">root</property>-->
+        <!--<property name="jdbc.password">123456</property>-->
+    <!--</properties>-->
     <properties>
         <property name="jdbc.driverClassName">com.mysql.jdbc.Driver</property>
-        <property name="jdbc.url">jdbc:mysql://10.202.111.121:3306/supplier</property>
-        <property name="jdbc.username">root</property>
-        <property name="jdbc.password">123456</property>
+        <property name="jdbc.url">jdbc:mysql://192.168.43.122:3306/supplier</property>
+        <property name="jdbc.username">debian-sys-maint</property>
+        <property name="jdbc.password">2XuUS1WTrQewjb0L</property>
     </properties>
-
 </config>

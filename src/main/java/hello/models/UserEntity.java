@@ -1,5 +1,6 @@
 package hello.models;
 
+import leap.core.security.UserPrincipal;
 import leap.orm.annotation.Column;
 import leap.orm.annotation.Id;
 import leap.orm.annotation.Table;
@@ -10,12 +11,13 @@ import java.util.Objects;
 
 
 @Table("USER")
-public class UserEntity extends Model {
+public class UserEntity extends Model implements UserPrincipal {
     @Id
     private String UId;
     @Column
     private String UAccount;
     @Column
+
     private String UPassword;
     @Column
     private String UName;
@@ -120,5 +122,37 @@ public class UserEntity extends Model {
 
     public void setUTime(Date UTime) {
         this.UTime = UTime;
+    }
+
+    @Override
+    public String toString() {
+        return "UserEntity{" +
+                "UId='" + UId + '\'' +
+                ", UAccount='" + UAccount + '\'' +
+                ", UPassword='" + UPassword + '\'' +
+                ", UName='" + UName + '\'' +
+                ", UFounderUid='" + UFounderUid + '\'' +
+                ", UPhone='" + UPhone + '\'' +
+                ", UEmail='" + UEmail + '\'' +
+                ", UIsdelete=" + UIsdelete +
+                ", UIsuse=" + UIsuse +
+                ", USex=" + USex +
+                ", UTime=" + UTime +
+                '}';
+    }
+
+    @Override
+    public String getName() {
+        return this.UName;
+    }
+
+    @Override
+    public String getLoginName() {
+        return this.UAccount;
+    }
+
+    @Override
+    public Object getId() {
+        return this.UId;
     }
 }

@@ -3,5 +3,7 @@ lib/
 target/
 .idea/
 .porject
+.DS_Store
 .settings/
 .classpath
+data/

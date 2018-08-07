@@ -19,4 +19,35 @@ public class UserDepartmentEntity extends Model {
     @Column
     private Date UdTime;
 
+    public String getDId() {
+        return DId;
+    }
+
+    public void setDId(String DId) {
+        this.DId = DId;
+    }
+
+    public String getUId() {
+        return UId;
+    }
+
+    public void setUId(String UId) {
+        this.UId = UId;
+    }
+
+    public String getUdUid() {
+        return UdUid;
+    }
+
+    public void setUdUid(String udUid) {
+        UdUid = udUid;
+    }
+
+    public Date getUdTime() {
+        return UdTime;
+    }
+
+    public void setUdTime(Date udTime) {
+        UdTime = udTime;
+    }
 }
