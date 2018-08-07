@@ -2,7 +2,7 @@ leaptest.iml
 lib/
 target/
 .idea/
-.porject
+.project
 .DS_Store
 .settings/
 .classpath
