@@ -5,7 +5,7 @@ import leap.orm.annotation.Id;
 import leap.orm.annotation.Table;
 import leap.orm.model.Model;
 
-import java.util.Date;
+import java.sql.Date;
 
 @Table(name="AFFIX",autoCreate=true)
 public class AffixEntity extends Model {
@@ -15,6 +15,8 @@ public class AffixEntity extends Model {
     private String Description;
     @Column
     private String Path;
+    @Column
+    private Date CreateTime;
 
     public String getId() {
         return Id;
@@ -40,4 +42,11 @@ public class AffixEntity extends Model {
         Path = path;
     }
 
+    public Date getCreateTime() {
+        return CreateTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        CreateTime = createTime;
+    }
 }

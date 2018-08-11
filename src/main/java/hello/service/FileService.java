@@ -16,10 +16,10 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.UUID;
 
 @Bean
 public class FileService {
@@ -88,6 +88,7 @@ public class FileService {
             FileUtils.forceMkdir(path.getParent().toFile());
             item.write(path.toFile());
             affixEntity.setPath(path.toAbsolutePath().toString());
+            affixEntity.setCreateTime(new Date(new java.util.Date().getTime()));
             affixEntity.create();
             return affixEntity;
         } catch (Exception e) {

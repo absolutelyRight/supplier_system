@@ -41,13 +41,14 @@ public class SupplierFileController extends ControllerBase {
         return new ServiceResult(200, "上传成功", null);
     }
 
-    //fixme 记录下谁下载过了几遍。塞在ServiceResult有木有用？
+    //fixme 记录下谁下载过了几遍。把File塞在ServiceResult有木有用？
     @Path("download")
     public ServiceResult downloadFile(String affixid) {
         final SupplierEntity supplierEntity = (SupplierEntity) request().getServletRequest().getSession().getAttribute("supplier");
         if (supplierEntity == null) {
             return ServiceResult.NOT_LOGIN;
         }
+        //权限不足，无法下载
         if (supplierEntity.getSCheckStatus() != 2) {
             return new ServiceResult(405, "暂时无法下载", "");
         }

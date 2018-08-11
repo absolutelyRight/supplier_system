@@ -18,13 +18,6 @@ public class SupplierService {
     public SupplierService() {
         log = LoggerFactory.getLogger(this.getClass());
     }
-    //fixme 可能需要分页 暂时返回供应商
-    public List<SupplierEntity> SuppliersList(){
-        Query<SupplierEntity> querylist=SupplierEntity.dao().createNamedQuery("supplier.all",SupplierEntity.class);
-        List<SupplierEntity> list=querylist.list();
-        list.forEach(v -> v.setSPassword(""));
-        return list;
-    }
 
     public ServiceResult SupplierLogin(UserLogin input){
         log.info("SupplierLogin");
@@ -87,5 +80,16 @@ public class SupplierService {
         }
         return output;
 
+    }
+    public ServiceResult  SupplierUpdate(SupplierEntity nowSupplier,SupplierEntity futureSupplier){
+        final SupplierEntity s1=SupplierEntity.findBy("S_EMAIL", futureSupplier.getSEmail());
+        if(s1!=null){
+            return new ServiceResult(401,"该邮箱已存在",null);
+        }
+        futureSupplier.setSId(nowSupplier.getSId());
+        futureSupplier.setSStartTime(nowSupplier.getSStartTime());
+        futureSupplier.setSCheckStatus(0);
+        futureSupplier.update();
+        return new ServiceResult(200,"",futureSupplier);
     }
 }

@@ -54,7 +54,7 @@ CREATE TABLE `ROLE` (
 
 `R_NAME` varchar(15) CHARACTER SET UTf8 NULL COMMENT '角色名',
 
-`R_TYPE` int(2) NULL COMMENT '角色类型（1需求人员；2采购员；3采购经理）',
+`R_TYPE` int(2) NULL COMMENT '角色类型（2需求人员（部门）；4采购员；8采购经理；10管理员）',
 
 PRIMARY KEY (`R_ID`)
 
@@ -122,7 +122,7 @@ CREATE TABLE `PURCHASE_NOTICE` (
 
 `PN_AFFIX` varchar(40) CHARACTER SET UTf8 NULL COMMENT '附件',
 
-`PN_ISDELETE` int(2) NULL COMMENT '是否删除（0删除；1未删除）',
+`PN_ISDELETE` int(2) NULL COMMENT '是否删除（0未删除；1删除）',
 
 `PN_DELETE_TIME` date NULL COMMENT '删除时间',
 
@@ -204,7 +204,7 @@ CREATE TABLE `NOTICE` (
 
 `N_CHECKUID` varchar(40) CHARACTER SET UTf8 NULL COMMENT '审核人',
 
-`N_CHECKSTATUS` int(2) NULL COMMENT '审核状态（0未审核；1已审核）',
+`N_CHECKSTATUS` int(2) NULL COMMENT '审核状态（0未审核；1已审核通过；2未审核通过）',
 
 `N_ISDELETE` int(2) NULL COMMENT '是否删除（0未删除；1已删除）',
 

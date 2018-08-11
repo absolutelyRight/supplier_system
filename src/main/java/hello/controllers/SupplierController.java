@@ -38,13 +38,16 @@ public class SupplierController extends ControllerBase {
         }
         return output;
     }
-//
-//    //查询参与过的投标
-//    @Path("getjoined")
-//    public ServiceResult
-//    //参与招标，需有权限管理
-//    //被邀请的招标
-//    //中过的投标
-//    //所供应产品的增删改查，查的话暴露两个接口，一个给登陆后的供应商，一个给后台查
-//    //自身信息查询，，每一次修改都会修改状态是否，过审核
+    @POST("update")
+    public ServiceResult updateSupplier(SupplierEntity supplier){
+        final SupplierEntity supplierEntity = (SupplierEntity) request().getServletRequest().getSession().getAttribute("supplier");
+        if (supplierEntity == null) {
+            return ServiceResult.NOT_LOGIN;
+        }
+        ServiceResult serviceResult=supplierService.SupplierUpdate(supplierEntity,supplier);
+        if (serviceResult.getCode()==200){
+            request().getServletRequest().getSession().setAttribute("supplier",serviceResult.getBusinessObject());
+        }
+        return serviceResult;
+    }
 }

@@ -1,10 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sqls xmlns="http://www.leapframework.org/schema/sqls">
     <command key="supplier.all">
-        select SUPPLIER.*,SUPPLIER_PRODUCT.SP_TYPE_NAME from SUPPLIER,SUPPLIER_PRODUCT,SUPPLIER_SERVICE where SUPPLIER.s_id=SUPPLIER_SERVICE.s_id and SUPPLIER_SERVICE.sp_id=SUPPLIER_PRODUCT.sp_id;
+        select SUPPLIER.*,SUPPLIER_PRODUCT.SP_TYPE_NAME from SUPPLIER,SUPPLIER_PRODUCT,SUPPLIER_SERVICE where
+        SUPPLIER.s_id=SUPPLIER_SERVICE.s_id and SUPPLIER_SERVICE.sp_id=SUPPLIER_PRODUCT.sp_id;
     </command>
     <command key="supplier.products">
-        select SUPPLIER_PRODUCT.* from SUPPLIER_PRODUCT,SUPPLIER_SERVICE where SUPPLIER_SERVICE.s_id = :id and SUPPLIER_SERVICE.sp_id=SUPPLIER_PRODUCT.sp_id;
+        select SUPPLIER_PRODUCT.* from SUPPLIER_PRODUCT,SUPPLIER_SERVICE where SUPPLIER_SERVICE.s_id =:id and
+        SUPPLIER_SERVICE.sp_id=SUPPLIER_PRODUCT.sp_id;
     </command>
-
+    <command key="supplier.joinedNotices">
+        select PURCHASE_NOTICE.* from PURCHASE_NOTICE,ARCHIVE where ARCHIVE.S_ID=:id and
+        ARCHIVE.PA_ID=PURCHASE_NOTICE.PN_ID;
+    </command>
+    <command key="supplier.winNotices">
+        select * from PURCHASE_NOTICE where PURCHASE_NOTICE.PN_SELECT_SUPPIERID=:id;
+    </command>
+    <command key="notice.common">
+        select * from NOTICE where NOTICE.N_TYPE=1 and NOTICE.N_CHECKSTATUS=1 and NOTICE.N_ISDELETE=0 ;
+    </command>
+    <command key="notice.purchase">
+        select * from NOTICE where NOTICE.N_TYPE=2 and NOTICE.N_CHECKSTATUS=1 and NOTICE.N_ISDELETE=0 ;
+    </command>
+    <command key="notice.select">
+        select * from NOTICE where NOTICE.N_TYPE=3 and NOTICE.N_CHECKSTATUS=1 and NOTICE.N_ISDELETE=0 ;
+    </command>
+    <command key="purchaseNotice">
+        select * from PURCHASE_NOTICE where PURCHASE_NOTICE.PN_ISDELETE=0 and PURCHASE_NOTICE.PN_ISUSE=1 and PURCHASE_NOTICE.PN_CHECK_STATUS=1 and PURCHASE_NOTICE.PN_SELECT_TIME is null ;
+    </command>
+    <command key="bingouser.login">
+        select * from USER where USER.U_ISDELETE=0 and USER.U_ISUSE=1;
+    </command>
+    <command key="getrole">
+        select ROLE.* from USER_ROLE,ROLE where USER_ROLE.U_ID=:id and ROLE.R_ID=USER_ROLE.R_ID;
+    </command>
 </sqls>

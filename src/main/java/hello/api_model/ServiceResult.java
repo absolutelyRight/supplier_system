@@ -6,6 +6,9 @@ public class ServiceResult {
     private Object businessObject;
     public static ServiceResult ERROR_RESULT=new ServiceResult(400);
     public static ServiceResult NOT_LOGIN=new ServiceResult(401,"未登录，请登录",null);
+    public static ServiceResult DB_ERROR=new ServiceResult(500,"数据库更改失败",null);
+    public static ServiceResult POWER_ERROR=new ServiceResult(403,"权限不足",null);
+    public static ServiceResult SUCCESS=new ServiceResult(200);
     public ServiceResult() {
     }
 

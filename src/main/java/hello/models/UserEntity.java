@@ -17,7 +17,6 @@ public class UserEntity extends Model implements UserPrincipal {
     @Column
     private String UAccount;
     @Column
-
     private String UPassword;
     @Column
     private String UName;

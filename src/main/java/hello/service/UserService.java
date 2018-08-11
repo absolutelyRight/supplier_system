@@ -1,9 +1,12 @@
 package hello.service;
 
 
+import hello.api_model.UserInfo;
 import hello.api_model.UserLogin;
 import hello.api_model.ServiceResult;
+import hello.models.RoleEntity;
 import hello.models.UserEntity;
+import hello.models.UserRoleEntity;
 import hello.util.CommonTool;
 import leap.core.annotation.Bean;
 import org.slf4j.Logger;
@@ -26,7 +29,7 @@ public class UserService {
         log = LoggerFactory.getLogger(this.getClass());
     }
 
-    public ServiceResult ManagerLogin(UserLogin input) {
+    public ServiceResult userLogin(UserLogin input) {
         final ServiceResult output = new ServiceResult();
         if (input.getUsername() == "" || input.getPassword() == "") {
             output.setCode(404);
@@ -53,10 +56,11 @@ public class UserService {
             output.setMsg(USER_AUDIT);
         }
         //清除用户敏感信息并返回前端
-        user.setUPassword("");
+        final String key="getrole";
+        RoleEntity roleEntity=UserRoleEntity.<RoleEntity>query(key).param("id",user.getUId()).first();
         output.setCode(200);
         output.setMsg("success");
-        output.setBusinessObject(user);
+        output.setBusinessObject(UserInfo.change(user,roleEntity.getRType()));
         return output;
     }
 
@@ -71,12 +75,13 @@ public class UserService {
         user.save();
         return new ServiceResult();
     }
-    //fixme 可能需要分页
+
     public ServiceResult GetUserList() {
         List<UserEntity>userlist=UserEntity.all();
         userlist.forEach(v->v.setUPassword(""));
         return new ServiceResult(200,"",userlist);
     }
+
     public ServiceResult UpdateUser(UserEntity userEntity){
         //fixme 怎么更新，值得跟前端商榷下
         UserEntity user=UserEntity.findOrNull(userEntity.getUId());
