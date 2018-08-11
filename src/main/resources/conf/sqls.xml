@@ -3,4 +3,8 @@
     <command key="supplier.all">
         select SUPPLIER.*,SUPPLIER_PRODUCT.SP_TYPE_NAME from SUPPLIER,SUPPLIER_PRODUCT,SUPPLIER_SERVICE where SUPPLIER.s_id=SUPPLIER_SERVICE.s_id and SUPPLIER_SERVICE.sp_id=SUPPLIER_PRODUCT.sp_id;
     </command>
+    <command key="supplier.products">
+        select SUPPLIER_PRODUCT.* from SUPPLIER_PRODUCT,SUPPLIER_SERVICE where SUPPLIER_SERVICE.s_id = :id and SUPPLIER_SERVICE.sp_id=SUPPLIER_PRODUCT.sp_id;
+    </command>
+
 </sqls>

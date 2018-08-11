@@ -33,6 +33,8 @@ public class PurchaseNoticeEntity extends Model {
     @Column
     private String PnUid;
     @Column
+    private String PnSummary;
+    @Column
     private String PnDeleteUid;
     @Column
     private Integer PnIsuse;
@@ -58,6 +60,14 @@ public class PurchaseNoticeEntity extends Model {
     private Date PnStartTime;
     @Column
     private Date PnPublishTime;
+
+    public String getPnSummary() {
+        return PnSummary;
+    }
+
+    public void setPnSummary(String pnSummary) {
+        PnSummary = pnSummary;
+    }
 
     public String getPnId() {
         return PnId;

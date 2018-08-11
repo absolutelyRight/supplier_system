@@ -1,9 +1,9 @@
 package hello.util;
 
-import java.util.Map;
+import java.util.UUID;
 
 public class CommonTool {
-    static public String getLoginTableName(String str){
+    static public String getBingoLoginTableName(String str){
         //邮箱登录
         if (str.matches("[a-zA-Z0-9_]+@[a-zA-Z0-9_]+(\\.[a-zA-Z0-9_]+)+"))
             return "U_EMAIL";
@@ -12,5 +12,15 @@ public class CommonTool {
             return "U_PHONE";
         }
         return "U_ACCOUNT";
+    }
+    static public boolean isEmil(String str){
+        //只允许邮箱登录
+        if (str.matches("[a-zA-Z0-9_]+@[a-zA-Z0-9_]+(\\.[a-zA-Z0-9_]+)+"))
+            return true;
+        return false;
+    }
+    static public String getIdUUID(String name){
+        UUID uuid = UUID.randomUUID();
+        return name+"-"+uuid.toString();
     }
 }

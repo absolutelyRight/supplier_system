@@ -1,7 +1,7 @@
 package hello.api_model;
 
-public class ManagerInput {
-    //fixme 要么加入角色信息。一个用户名对应一个角色
+public class UserLogin {
+    //fixme 要么加入角色信息。一个用户名对应一个角色,
     private String username;
     private String password;
 

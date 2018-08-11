@@ -4,11 +4,12 @@ import leap.orm.annotation.Column;
 import leap.orm.annotation.Id;
 import leap.orm.annotation.Table;
 import leap.orm.model.Model;
+
 import java.sql.Date;
 
 
 @Table("NOTICE")
-public class NoticeEntity extends Model{
+public class NoticeEntity extends Model {
     @Id
     private String NId;
     @Column
@@ -17,6 +18,8 @@ public class NoticeEntity extends Model{
     private String NText;
     @Column
     private String NAffix;
+    @Column
+    private String NSummary;
     @Column
     private Date NStarttime;
     @Column
@@ -188,5 +191,13 @@ public class NoticeEntity extends Model{
 
     public void setNDeleteTime(Date NDeleteTime) {
         this.NDeleteTime = NDeleteTime;
+    }
+
+    public String getNSummary() {
+        return NSummary;
+    }
+
+    public void setNSummary(String NSummary) {
+        this.NSummary = NSummary;
     }
 }

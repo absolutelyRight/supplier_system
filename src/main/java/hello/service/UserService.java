@@ -1,7 +1,7 @@
 package hello.service;
 
 
-import hello.api_model.ManagerInput;
+import hello.api_model.UserLogin;
 import hello.api_model.ServiceResult;
 import hello.models.UserEntity;
 import hello.util.CommonTool;
@@ -17,7 +17,7 @@ import static hello.api_model.ServiceResult.ERROR_RESULT;
 public class UserService {
     private Logger log;
 
-    public static final String PARAMETER_EMPTY = "输入参数为空";
+    public static final String PARAMETER_EMPTY = "请输入正确的格式";
     public static final String USER_NOT_EXIST = "用户不存在";
     public static final String USER_ERROR = "用户名密码错误";
     public static final String USER_AUDIT = "审核中";
@@ -26,7 +26,7 @@ public class UserService {
         log = LoggerFactory.getLogger(this.getClass());
     }
 
-    public ServiceResult ManagerLogin(ManagerInput input) {
+    public ServiceResult ManagerLogin(UserLogin input) {
         final ServiceResult output = new ServiceResult();
         if (input.getUsername() == "" || input.getPassword() == "") {
             output.setCode(404);
@@ -34,7 +34,7 @@ public class UserService {
         }
         log.info(input.getUsername());
         //根据用户名，正则匹配用户输入的是邮箱还是手机号还是用户名
-        final UserEntity user = UserEntity.findBy(CommonTool.getLoginTableName(input.getUsername()), input.getUsername());
+        final UserEntity user = UserEntity.findBy(CommonTool.getBingoLoginTableName(input.getUsername()), input.getUsername());
 
         if (user == null || (user.getUIsdelete() != null && user.getUIsdelete() == 1)) {
             //用户名不存在

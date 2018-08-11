@@ -45,9 +45,7 @@ public class SupplierEntity extends Model {
     @Column
     private String SPassword;
     @Column
-    private String SEmailUrl;
-    @Column
-    private String SAccount;
+    private String SBankAccount;
     @Column
     private String SAccountName;
     @Column
@@ -69,6 +67,8 @@ public class SupplierEntity extends Model {
     private Integer SPhone;
     @Column
     private Integer SCheckStatus;
+    @Column
+    private Integer SIsdelete;
 
     public String getSId() {
         return SId;
@@ -206,20 +206,12 @@ public class SupplierEntity extends Model {
         this.SPassword = SPassword;
     }
 
-    public String getSEmailUrl() {
-        return SEmailUrl;
+    public String getSBankAccount() {
+        return SBankAccount;
     }
 
-    public void setSEmailUrl(String SEmailUrl) {
-        this.SEmailUrl = SEmailUrl;
-    }
-
-    public String getSAccount() {
-        return SAccount;
-    }
-
-    public void setSAccount(String SAccount) {
-        this.SAccount = SAccount;
+    public void setSBankAccount(String SBankAccount) {
+        this.SBankAccount = SBankAccount;
     }
 
     public String getSAccountName() {
@@ -308,5 +300,13 @@ public class SupplierEntity extends Model {
 
     public void setSCheckStatus(Integer SCheckStatus) {
         this.SCheckStatus = SCheckStatus;
+    }
+
+    public Integer getSIsdelete() {
+        return SIsdelete;
+    }
+
+    public void setSIsdelete(Integer SIsdelete) {
+        this.SIsdelete = SIsdelete;
     }
 }

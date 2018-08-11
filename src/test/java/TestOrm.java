@@ -1,4 +1,3 @@
-import hello.api_model.SupplierOutput;
 import hello.models.RoleEntity;
 import hello.models.SupplierEntity;
 import leap.core.junit.AppTestBase;
@@ -26,10 +25,10 @@ public class TestOrm extends AppTestBase {
 
     @Test
     public void testSql() {
-        Query<SupplierOutput> querylist=SupplierEntity.dao().createNamedQuery("supplier.all",SupplierOutput.class);
-        List<SupplierOutput> list=querylist.list();
-        list.forEach(v->v.setSPassword(""));
-        list.forEach(v->System.out.println(v.toString()));
+//        Query<SupplierOutput> querylist=SupplierEntity.dao().createNamedQuery("supplier.all",SupplierOutput.class);
+//        List<SupplierOutput> list=querylist.list();
+//        list.forEach(v->v.setSPassword(""));
+//        list.forEach(v->System.out.println(v.toString()));
     }
 
 }

@@ -5,6 +5,7 @@ public class ServiceResult {
     private String msg;
     private Object businessObject;
     public static ServiceResult ERROR_RESULT=new ServiceResult(400);
+    public static ServiceResult NOT_LOGIN=new ServiceResult(401,"未登录，请登录",null);
     public ServiceResult() {
     }
 

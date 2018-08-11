@@ -1,6 +1,7 @@
 package hello.service;
 
 import hello.models.AffixEntity;
+import hello.util.CommonTool;
 import leap.core.annotation.Bean;
 import leap.web.download.FileDownload;
 import org.apache.commons.fileupload.FileItem;
@@ -82,8 +83,7 @@ public class FileService {
         try {
             // item.getName()返回上传文件在客户端的完整路径名称
             AffixEntity affixEntity = new AffixEntity();
-            affixEntity.setId(UUID.randomUUID().toString());
-
+            affixEntity.setId(CommonTool.getIdUUID(AffixEntity.class.getName()));
             Path path = Paths.get(ROOT_PATH, affixEntity.getId(), item.getName());
             FileUtils.forceMkdir(path.getParent().toFile());
             item.write(path.toFile());
