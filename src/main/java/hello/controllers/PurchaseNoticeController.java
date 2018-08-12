@@ -75,11 +75,32 @@ public class PurchaseNoticeController extends ControllerBase {
         return purchaseNoticeService.needList();
     }
     //查看所有到达截止日期的投标
-
-    //查看投标内所有参与投标的供应商
-    @Post("joinedSippliers")
-    public ServiceResult joinedSippliers(){
-
+    @Path("lookup")
+    public ServiceResult lookup(){
+        final UserInfo user = (UserInfo) request().getServletRequest().getSession().getAttribute("user");
+        if (user == null) {
+            return ServiceResult.NOT_LOGIN;
+        }
+        return purchaseNoticeService.lookup();
     }
-    //选择中标的供应商
+    //查看投标内所有参与投标的供应商
+    @Path("joinedSippliers")
+    public ServiceResult joinedSippliers(String purchaseNoticeId){
+        final UserInfo user = (UserInfo) request().getServletRequest().getSession().getAttribute("user");
+        if (user == null) {
+            return ServiceResult.NOT_LOGIN;
+        }
+        return purchaseNoticeService.listJoinedSuppliers(purchaseNoticeId);
+    }
+    //选择中标的供应商,部门经理的权限才行
+    @Path("selectOne")
+    public ServiceResult selectOneSupplier(String purchaseNoticeId,String supplierId){
+        final UserInfo user = (UserInfo) request().getServletRequest().getSession().getAttribute("user");
+        if (user == null) {
+            return ServiceResult.NOT_LOGIN;
+        }
+        if (user.getType() != UserInfo.ROOT||user.getType() !=UserInfo.MANAGER )
+            return ServiceResult.POWER_ERROR;
+        return purchaseNoticeService.selectOneSupplier(purchaseNoticeId,supplierId);
+    }
 }
