@@ -204,7 +204,7 @@ CREATE TABLE `NOTICE` (
 
 `N_CHECKUID` varchar(40) CHARACTER SET UTf8 NULL COMMENT '审核人',
 
-`N_CHECKSTATUS` int(2) NULL COMMENT '审核状态（0未审核；1已审核通过；2未审核通过）',
+`N_CHECKSTATUS` int(2) NULL COMMENT '审核状态（0未审核；1已审核通过；2未审核通过;）',
 
 `N_ISDELETE` int(2) NULL COMMENT '是否删除（0未删除；1已删除）',
 

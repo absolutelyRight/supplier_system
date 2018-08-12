@@ -4,14 +4,13 @@ package hello.service;
 import hello.api_model.UserInfo;
 import hello.api_model.UserLogin;
 import hello.api_model.ServiceResult;
-import hello.models.RoleEntity;
-import hello.models.UserEntity;
-import hello.models.UserRoleEntity;
+import hello.models.*;
 import hello.util.CommonTool;
 import leap.core.annotation.Bean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.sql.Date;
 import java.util.List;
 
 import static hello.api_model.ServiceResult.ERROR_RESULT;
@@ -55,53 +54,85 @@ public class UserService {
             output.setCode(403);
             output.setMsg(USER_AUDIT);
         }
-        //清除用户敏感信息并返回前端
-        final String key="getrole";
-        RoleEntity roleEntity=UserRoleEntity.<RoleEntity>query(key).param("id",user.getUId()).first();
+        final String key = "userGetRole";
+        RoleEntity roleEntity = UserRoleEntity.<RoleEntity>query(key).param("id", user.getUId()).first();
+        final String key2 = "userGetDepartment";
+        List<DepartmentEntity> departmentEntitys = DepartmentEntity.<DepartmentEntity>query(key2).param("id", user.getUId()).list();
+        if (departmentEntitys == null || departmentEntitys.isEmpty()) {
+            output.setBusinessObject(UserInfo.change(user, roleEntity.getRType(),""));
+        } else {
+            output.setBusinessObject(UserInfo.change(user, roleEntity.getRType(), departmentEntitys.get(0).getDId()));
+        }
         output.setCode(200);
         output.setMsg("success");
-        output.setBusinessObject(UserInfo.change(user,roleEntity.getRType()));
+
         return output;
     }
 
     public ServiceResult RemoveUser(String id) {
         UserEntity user = UserEntity.findOrNull(id);
-        //删除某用户，竟然发现为空！
         if (user == null) {
-            return new ServiceResult();
+            return ServiceResult.SUCCESS;
         }
         //逻辑删除
         user.setUIsdelete(1);
         user.save();
-        return new ServiceResult();
+        return ServiceResult.SUCCESS;
     }
 
     public ServiceResult GetUserList() {
-        List<UserEntity>userlist=UserEntity.all();
-        userlist.forEach(v->v.setUPassword(""));
-        return new ServiceResult(200,"",userlist);
+        List<UserEntity> userlist = UserEntity.all();
+        userlist.forEach(v -> v.setUPassword(""));
+        return new ServiceResult(200, "", userlist);
     }
 
-    public ServiceResult UpdateUser(UserEntity userEntity){
+    public ServiceResult UpdateUser(UserEntity userEntity) {
         //fixme 怎么更新，值得跟前端商榷下
-        UserEntity user=UserEntity.findOrNull(userEntity.getUId());
-        if(user==null){
-            return new ServiceResult(404,"所修改的用户不存在",null);
+        UserEntity user = UserEntity.findOrNull(userEntity.getUId());
+        if (user == null) {
+            return new ServiceResult(404, "所修改的用户不存在", null);
         }
-        UserEntity user1=userEntity.update();
-        if (user1==null)
+        UserEntity user1 = userEntity.update();
+        if (user1 == null)
             return ERROR_RESULT;
         user1.setUPassword("");
-        return new ServiceResult(200,"",user1);
+        return new ServiceResult(200, "", user1);
     }
-    public ServiceResult InsertUser(UserEntity userEntity){
-        UserEntity user=UserEntity.findOrNull(userEntity.getUId());
-        if(user!=null){
-            return new ServiceResult(404,"所需添加用户已存在",null);
+
+    public ServiceResult AddtUser(UserInfo userInfo,String createUserId) {
+        final DepartmentEntity departmentEntity=DepartmentEntity.findOrNull(userInfo.getDId());
+        if(departmentEntity==null){
+            return new ServiceResult(404,"部门不存在",null);
         }
-        UserEntity user1=userEntity.create();
-        if (user1==null)
-            return new ServiceResult(404,"添加用户失败",null);
-        return new ServiceResult(200,"",null);
+        userInfo.setDepartmentName(departmentEntity.getDName());
+        final RoleEntity roleEntity=RoleEntity.findOrNull(userInfo.getRoleId());
+        if(roleEntity==null){
+            return new ServiceResult(404,"角色不存在",null);
+        }
+        userInfo.setRoleId(roleEntity.getRId());
+        final UserEntity userEntity= UserInfo.change(userInfo);
+        userEntity.setUTime(new Date(new java.util.Date().getTime()));
+        userEntity.setUId(CommonTool.getIdUUID(UserEntity.class.getName()));
+        userEntity.setUIsdelete(0);
+        userEntity.setUIsuse(1);
+        UserEntity user1 = userEntity.create();
+        if (user1 == null)
+            return new ServiceResult(404, "添加用户失败", null);
+        final UserRoleEntity userRoleEntity=new UserRoleEntity();
+        userRoleEntity.setRId(roleEntity.getRId());
+        userRoleEntity.setUId(user1.getUId());
+        userRoleEntity.setUrTime(new Date(new java.util.Date().getTime()));
+        userRoleEntity.setUrUid(createUserId);
+        if (userRoleEntity.create()==null)
+            return new ServiceResult(404, "添加用户角色失败", null);
+        final UserDepartmentEntity userDepartmentEntity=new UserDepartmentEntity();
+        userDepartmentEntity.setDId(departmentEntity.getDId());
+        userDepartmentEntity.setUdTime(new Date(new java.util.Date().getTime()));
+        userDepartmentEntity.setUId(user1.getUId());
+        userDepartmentEntity.setUdUid(createUserId);
+        if (userRoleEntity.create()==null)
+            return new ServiceResult(404, "添加用户部门失败", null);
+        userInfo.setUPassword("");
+        return new ServiceResult(200, "", userInfo);
     }
 }
