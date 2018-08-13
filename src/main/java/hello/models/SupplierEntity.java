@@ -8,7 +8,7 @@ import leap.orm.model.Model;
 import java.sql.Date;
 
 
-@Table("SUPPLIER")
+@Table(name="SUPPLIER", autoCreate = true)
 public class SupplierEntity extends Model {
     @Id
     private String SId;

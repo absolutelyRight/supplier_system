@@ -4,7 +4,6 @@ import hello.api_model.UserInfo;
 import hello.api_model.UserLogin;
 import hello.api_model.ServiceResult;
 import hello.models.AffixEntity;
-import hello.models.UserEntity;
 import hello.service.FileService;
 import hello.service.SupplierService;
 import hello.service.UserService;

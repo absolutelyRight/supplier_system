@@ -7,7 +7,7 @@ import leap.orm.model.Model;
 
 
 
-@Table("SUPPLIER_PRODUCT")
+@Table(name="SUPPLIER_PRODUCT", autoCreate = true)
 public class SupplierProductEntity extends Model {
     @Id
     private String SpId;

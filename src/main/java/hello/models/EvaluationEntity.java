@@ -9,7 +9,7 @@ import leap.orm.model.Model;
 import java.sql.Date;
 
 
-@Table("EVALUATION")
+@Table(name="EVALUATION", autoCreate = true)
 public class EvaluationEntity extends Model {
     @Id
     private String EId;

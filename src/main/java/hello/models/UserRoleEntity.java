@@ -9,7 +9,7 @@ import leap.orm.model.Model;
 import java.sql.Date;
 
 
-@Table("USER_ROLE")
+@Table(name="USER_ROLE", autoCreate = true)
 public class UserRoleEntity extends Model {
     @Id
     private String UId;

@@ -8,7 +8,7 @@ import leap.orm.model.Model;
 import java.sql.Date;
 
 
-@Table(name = "PURCHASE_LIST")
+@Table(name = "PURCHASE_LIST", autoCreate = true)
 public class PurchaseListEntity extends Model {
     @Id
     private String PlId;
@@ -34,6 +34,10 @@ public class PurchaseListEntity extends Model {
     private Date PlCheckTime;
     @Column
     private Date PlStartTime;
+    @Column
+    private Integer PlIsDelete;
+    @Column
+    private String PlDeleteUId;
 
     public String getPlId() {
         return PlId;
@@ -129,5 +133,21 @@ public class PurchaseListEntity extends Model {
 
     public void setPlStartTime(Date plStartTime) {
         PlStartTime = plStartTime;
+    }
+
+    public Integer getPlIsDelete() {
+        return PlIsDelete;
+    }
+
+    public void setPlIsDelete(Integer plIsDelete) {
+        PlIsDelete = plIsDelete;
+    }
+
+    public String getPlDeleteUId() {
+        return PlDeleteUId;
+    }
+
+    public void setPlDeleteUId(String plDeleteUId) {
+        PlDeleteUId = plDeleteUId;
     }
 }

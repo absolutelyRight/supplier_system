@@ -31,8 +31,10 @@ public class NoticeService {
     }
     public ServiceResult examineNotice(AbstractNotice abstractNotice, UserInfo userInfo){
         try {
-            NoticeEntity noticeEntity=abstractNotice.toSampleNotice();
-            noticeEntity.setNId(abstractNotice.getId());
+            NoticeEntity noticeEntity=NoticeEntity.findOrNull(abstractNotice.getId());
+            if (noticeEntity==null)
+                return ServiceResult.ERROR_RESULT;
+            abstractNotice.toSampleNotice(noticeEntity);
             noticeEntity.setNCheckstatus(abstractNotice.getChecksStatus());
             noticeEntity.setNReason(abstractNotice.getReason());
             noticeEntity.setNCheckuid(userInfo.getUId());
@@ -48,8 +50,10 @@ public class NoticeService {
     }
     public ServiceResult fixNotice(AbstractNotice abstractNotice, UserInfo userInfo){
         try {
-            NoticeEntity noticeEntity=abstractNotice.toSampleNotice();
-            noticeEntity.setNId(abstractNotice.getId());
+            NoticeEntity noticeEntity=NoticeEntity.findOrNull(abstractNotice.getId());
+            if (noticeEntity==null)
+                return ServiceResult.ERROR_RESULT;
+            abstractNotice.toSampleNotice(noticeEntity);
             noticeEntity.setNUpdateuid(userInfo.getUId());
             noticeEntity.setNUpdatetime(new Date(new java.util.Date().getTime()));
             if(noticeEntity.update()==null)

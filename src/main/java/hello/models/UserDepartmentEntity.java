@@ -8,7 +8,7 @@ import leap.orm.model.Model;
 import java.sql.Date;
 
 
-@Table(name = "USER_DEPARTMENT")
+@Table(name = "USER_DEPARTMENT", autoCreate = true)
 public class UserDepartmentEntity extends Model {
     @Id
     private String DId;

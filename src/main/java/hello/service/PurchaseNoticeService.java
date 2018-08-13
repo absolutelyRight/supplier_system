@@ -19,7 +19,7 @@ public class PurchaseNoticeService {
             purchaseNoticeEntity.setPnId(CommonTool.getIdUUID(PurchaseNoticeEntity.class.getName()));
             purchaseNoticeEntity.setPnStartTime(new Date(new java.util.Date().getTime()));
             purchaseNoticeEntity.setPnPublishUid(userInfo.getUId());
-            purchaseNoticeEntity.setPnCheckStatus(0);
+            purchaseNoticeEntity.setPnCheckStatus(2);
             purchaseNoticeEntity.setPnIsdelete(0);
             if (purchaseNoticeEntity.create() == null)
                 return ServiceResult.DB_ERROR;
@@ -34,7 +34,10 @@ public class PurchaseNoticeService {
     //fixme 审核通过后向所有邀请的供应商发送通知
     public ServiceResult examineNotice(AbstractNotice abstractNotice, UserInfo userInfo) {
         try {
-            PurchaseNoticeEntity purchaseNoticeEntity = abstractNotice.toSamplePurchase();
+            PurchaseNoticeEntity purchaseNoticeEntity=PurchaseNoticeEntity.findOrNull(abstractNotice.getId());
+            if(purchaseNoticeEntity==null)
+                return ServiceResult.ERROR_RESULT;
+            abstractNotice.toSamplePurchase(purchaseNoticeEntity);
             purchaseNoticeEntity.setPnId(abstractNotice.getId());
             purchaseNoticeEntity.setPnCheckStatus(abstractNotice.getChecksStatus());
             purchaseNoticeEntity.setPnReason(abstractNotice.getReason());
@@ -52,7 +55,10 @@ public class PurchaseNoticeService {
 
     public ServiceResult fixNotice(AbstractNotice abstractNotice, UserInfo userInfo) {
         try {
-            PurchaseNoticeEntity purchaseNoticeEntity = abstractNotice.toSamplePurchase();
+            PurchaseNoticeEntity purchaseNoticeEntity=PurchaseNoticeEntity.findOrNull(abstractNotice.getId());
+            if(purchaseNoticeEntity==null)
+                return ServiceResult.ERROR_RESULT;
+            abstractNotice.toSamplePurchase(purchaseNoticeEntity);
             purchaseNoticeEntity.setPnId(abstractNotice.getId());
             purchaseNoticeEntity.setPnCheckUid(userInfo.getUId());
             purchaseNoticeEntity.setPnUpdateTime(new Date(new java.util.Date().getTime()));
@@ -117,7 +123,7 @@ public class PurchaseNoticeService {
 
     //fixme 日期比较不知道能不能这么写
     public ServiceResult lookup() {
-        final String key = "lookup";
+        final String key = "lookupBeforeEnd";
         List<PurchaseNoticeEntity> purchaseNoticeEntities = PurchaseNoticeEntity.<PurchaseNoticeEntity>query(key).param("time", new Date(new java.util.Date().getTime()).toString()).list();
         return new ServiceResult(200, "", purchaseNoticeEntities);
     }

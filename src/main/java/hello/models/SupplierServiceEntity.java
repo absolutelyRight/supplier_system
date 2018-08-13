@@ -7,7 +7,7 @@ import leap.orm.annotation.Table;
 import leap.orm.model.Model;
 import java.util.Objects;
 
-@Table("SUPPLIER_SERVICE")
+@Table(name="SUPPLIER_SERVICE", autoCreate = true)
 public class SupplierServiceEntity extends Model{
     @Id
     //@ManyToOne(SupplierEntity.class)
