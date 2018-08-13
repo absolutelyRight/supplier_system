@@ -32,7 +32,37 @@
     <command key="bingouser.login">
         select * from USER where USER.U_ISDELETE=0 and USER.U_ISUSE=1;
     </command>
-    <command key="getrole">
+    <command key="userGetRole">
         select ROLE.* from USER_ROLE,ROLE where USER_ROLE.U_ID=:id and ROLE.R_ID=USER_ROLE.R_ID;
+    </command>
+    <command key="userGetDepartment">
+        select DEPARTMENT.* from DEPARTMENT,USER_DEPARTMENT where USER_DEPARTMENT.U_ID=:id and USER_DEPARTMENT.D_ID=DEPARTMENT.D_ID;
+    </command>
+    <command key="getrole.userid">
+        select USER_ROLE.* from USER_ROLE,ROLE where USER_ROLE.U_ID=:id and ROLE.R_ID=USER_ROLE.R_ID and ROLE.R_TYPE=:type;
+    </command>
+    <command key="DepartmentList">
+        select * from DEPARTMENT where DEPARTMENT.D_ISPUBLIC=1；
+    </command>
+    <command key="GetHisselfNotices">
+        select * from NOTICE where NOTICE.N_STARTUID=:id and NOTICE.N_CHECKSTATUS=:status and NOTICE.N_ISDELETE=0;
+    </command>
+    <command key="GetNeedNotices">
+        select * from NOTICE where  NOTICE.N_CHECKSTATUS=0 and NOTICE.N_ISDELETE=0;
+    </command>
+    <command key="GetHisselfPNotices">
+        select * from PURCHASE_NOTICE where PURCHASE_NOTICE.N_STARTUID=:id and PURCHASE_NOTICE.N_CHECKSTATUS=:status and PURCHASE_NOTICE.N_ISDELETE=0;
+    </command>
+    <command key="GetNeedPNotices">
+        select * from PURCHASE_NOTICE where  PURCHASE_NOTICE.N_CHECKSTATUS=0 and PURCHASE_NOTICE.N_ISDELETE=0;
+    </command>
+    <command key="listJoinedSuppliers">
+        select SUPPLIER.* from PURCHASE_NOTICE,ARCHIVE,SUPPLIER where  PURCHASE_NOTICE.PN_ID=:id and PURCHASE_NOTICE.PN_ID=ARCHIVE.PA_ID and ARCHIVE.S_ID=SUPPLIER.S_ID;
+    </command>
+    <command key="listJoinedArchive">
+        select ARCHIVE.* from PURCHASE_NOTICE,ARCHIVE where PURCHASE_NOTICE.PN_ID=:id and PURCHASE_NOTICE.PN_ID=ARCHIVE.PA_ID;
+    </command>
+    <command key="lookup">
+        select * from PURCHASE_NOTICE where PURCHASE_NOTICE.PN_STOP_TIME &lt; :time;
     </command>
 </sqls>
