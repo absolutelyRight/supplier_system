@@ -17,7 +17,6 @@ import leap.web.download.FileDownload;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
-
 @Path("bingouser")
 public class BingoUserController extends ControllerBase {
 
@@ -124,7 +123,7 @@ public class BingoUserController extends ControllerBase {
         ServiceResult serviceResult = new ServiceResult();
 
         try {
-            // 上传文件
+          	// 上传文件
             HttpServletRequest request = request().getServletRequest();
             List<AffixEntity> list = fileService.uploadFiles(request);
             if (list.isEmpty()) {

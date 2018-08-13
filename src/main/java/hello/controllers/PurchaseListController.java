@@ -8,7 +8,7 @@ import leap.core.annotation.Inject;
 import leap.web.action.ControllerBase;
 import leap.web.annotation.Path;
 
-public class PurchaseListController  extends ControllerBase {
+public class PurchaseListController extends ControllerBase {
     //需求模块
     @Inject
     private PurchaseListService purchaseListService;
@@ -28,6 +28,9 @@ public class PurchaseListController  extends ControllerBase {
         if (user == null) {
             return ServiceResult.NOT_LOGIN;
         }
+        //只有经理或者系统管理员才有权限审核
+        if (user.getType() != UserInfo.ROOT || user.getType() != UserInfo.MANAGER)
+            return ServiceResult.POWER_ERROR;
         return purchaseListService.examine(abstractNotice, user);
     }
 
@@ -39,8 +42,9 @@ public class PurchaseListController  extends ControllerBase {
         }
         return purchaseListService.remove(abstractNoticeId, user);
     }
+
     @Path("status")
-    public ServiceResult lookStatus(String status){
+    public ServiceResult lookStatus(String status) {
         final UserInfo user = (UserInfo) request().getServletRequest().getSession().getAttribute("user");
         if (user == null) {
             return ServiceResult.NOT_LOGIN;

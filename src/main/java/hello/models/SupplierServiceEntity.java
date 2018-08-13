@@ -1,19 +1,17 @@
 package hello.models;
 
-import leap.orm.annotation.Column;
 import leap.orm.annotation.Id;
 import leap.orm.annotation.ManyToOne;
 import leap.orm.annotation.Table;
 import leap.orm.model.Model;
-import java.util.Objects;
 
 @Table(name="SUPPLIER_SERVICE", autoCreate = true)
 public class SupplierServiceEntity extends Model{
     @Id
-    //@ManyToOne(SupplierEntity.class)
+    @ManyToOne(SupplierEntity.class)
     private String SId;
     @Id
-   // @ManyToOne(SupplierProductEntity.class)
+    @ManyToOne(SupplierProductEntity.class)
     private String SpId;
 
     public String getSId() {

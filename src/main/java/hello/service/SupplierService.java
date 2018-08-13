@@ -1,15 +1,18 @@
 package hello.service;
 
-import hello.api_model.UserLogin;
-import hello.api_model.ServiceResult;
-import hello.models.SupplierEntity;
-import hello.util.CommonTool;
-import leap.core.annotation.Bean;
-import leap.orm.query.Query;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.List;
+import hello.api_model.ServiceResult;
+import hello.api_model.UserLogin;
+import hello.models.SupplierEntity;
+import hello.util.CommonTool;
+import leap.core.annotation.Bean;
+import leap.lang.json.JSON;
+import leap.orm.query.PageResult;
 
 @Bean
 public class SupplierService {
@@ -91,5 +94,31 @@ public class SupplierService {
         futureSupplier.setSCheckStatus(0);
         futureSupplier.update();
         return new ServiceResult(200,"",futureSupplier);
+    }
+    
+    public ServiceResult Remove(String id) {
+        SupplierEntity user = SupplierEntity.findOrNull(id);
+        //删除某用户，竟然发现为空！
+        if (user == null) {
+            return ServiceResult.NOT_FOUND;
+        }
+        //逻辑删除
+        user.setSIsdelete(1);
+        user.save();
+        return ServiceResult.SUCCESS;
+    }
+    public ServiceResult PageSearch(String type,String name,int index,int pageSize) {
+    	String key="supplier.all";
+        PageResult<SupplierEntity> page=SupplierEntity.<SupplierEntity>query(key)
+        		.param("name", name).param("type", type!=null&&type.matches("{(\\d+,)*\\d+}")?type:null)
+        		.pageResult(index, pageSize);
+        Map<String,Object> pageObj=new HashMap<>(4);
+        pageObj.put("page",page);
+        pageObj.put("list",page.list());
+        System.out.println(page.list().get(0).toString());
+        System.out.println(JSON.encode(page.list().get(0)));
+        System.out.println(page.list().get(0).getClass().getName());
+//        noticeEntities.forEach(v->{v.setNCheckuid("");v.setNStartuid("");v.setNUpdateuid("");});
+        return new ServiceResult(200,"",pageObj);
     }
 }

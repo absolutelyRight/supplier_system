@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sqls xmlns="http://www.leapframework.org/schema/sqls">
     <command key="supplier.all">
-        select SUPPLIER.*,SUPPLIER_PRODUCT.SP_TYPE_NAME from SUPPLIER,SUPPLIER_PRODUCT,SUPPLIER_SERVICE where
-        SUPPLIER.s_id=SUPPLIER_SERVICE.s_id and SUPPLIER_SERVICE.sp_id=SUPPLIER_PRODUCT.sp_id;
+        select SUPPLIER.*,SUPPLIER_PRODUCT.sp_id,SUPPLIER_PRODUCT.SP_TYPE_NAME from SUPPLIER,SUPPLIER_PRODUCT,SUPPLIER_SERVICE where
+        SUPPLIER.s_id=SUPPLIER_SERVICE.s_id and SUPPLIER_SERVICE.sp_id=SUPPLIER_PRODUCT.sp_id
+        {? and SUPPLIER.s_full_name =#name#}
+        {? and SUPPLIER.s_id in(select SUPPLIER_SERVICE.s_id from SUPPLIER_SERVICE where SUPPLIER_SERVICE.sp_id in $type$});
     </command>
     <command key="supplier.products">
         select SUPPLIER_PRODUCT.* from SUPPLIER_PRODUCT,SUPPLIER_SERVICE where SUPPLIER_SERVICE.s_id =:id and

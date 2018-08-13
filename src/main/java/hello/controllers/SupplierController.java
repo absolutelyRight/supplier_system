@@ -7,6 +7,8 @@ import hello.service.SupplierService;
 import leap.core.annotation.Inject;
 import leap.web.action.ControllerBase;
 import leap.web.annotation.Path;
+import leap.web.annotation.PathParam;
+import leap.web.annotation.http.DELETE;
 import leap.web.annotation.http.POST;
 
 public class SupplierController extends ControllerBase {
@@ -49,5 +51,18 @@ public class SupplierController extends ControllerBase {
             request().getServletRequest().getSession().setAttribute("supplier",serviceResult.getBusinessObject());
         }
         return serviceResult;
+    }
+    
+    @POST("add")
+    public ServiceResult addSupplier(@PathParam String id){
+    	return supplierService.Remove(id);
+    }
+    @POST("page/{index}")
+    public ServiceResult listSupplierPage(@PathParam int index,String type,String name){
+    	return supplierService.PageSearch(type, name, index, 5);
+    }
+    @DELETE("{id}")
+    public ServiceResult removeSupplier(@PathParam String id){
+    	return supplierService.Remove(id);
     }
 }

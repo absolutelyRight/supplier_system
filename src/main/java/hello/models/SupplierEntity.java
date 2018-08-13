@@ -1,14 +1,18 @@
 package hello.models;
 
+import java.sql.Date;
+import java.util.List;
+
 import leap.orm.annotation.Column;
 import leap.orm.annotation.Id;
+import leap.orm.annotation.ManyToMany;
+import leap.orm.annotation.Relational;
 import leap.orm.annotation.Table;
 import leap.orm.model.Model;
 
-import java.sql.Date;
-
 
 @Table(name="SUPPLIER", autoCreate = true)
+@ManyToMany(target=SupplierProductEntity.class,joinEntityType=SupplierServiceEntity.class)
 public class SupplierEntity extends Model {
     @Id
     private String SId;
@@ -50,6 +54,7 @@ public class SupplierEntity extends Model {
     private String SAccountName;
     @Column
     private String SAffix;
+    @Column
     private Date SCheckTime;
     @Column
     private Date SStartTime;
@@ -69,6 +74,9 @@ public class SupplierEntity extends Model {
     private Integer SCheckStatus;
     @Column
     private Integer SIsdelete;
+    
+    @Relational
+    private List<SupplierProductEntity> products;
 
     public String getSId() {
         return SId;
