@@ -7,7 +7,7 @@ import leap.orm.annotation.Table;
 import leap.orm.model.Model;
 
 
-@Table("DEPARTMENT")
+@Table(name="DEPARTMENT", autoCreate = true)
 public class DepartmentEntity extends Model{
     @Id
     private String DId;

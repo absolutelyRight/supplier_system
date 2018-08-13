@@ -1,6 +1,7 @@
 package hello.api_model;
 
 import hello.models.NoticeEntity;
+import hello.models.PurchaseListEntity;
 import hello.models.PurchaseNoticeEntity;
 
 import java.text.ParseException;
@@ -28,6 +29,19 @@ public class AbstractNotice {
     private String reason;
     //是否删除
     private Integer isDelete;
+    //转换成
+    public PurchaseListEntity toSamplePurchaseList(){
+        PurchaseListEntity purchaseListEntity=new PurchaseListEntity();
+        purchaseListEntity.setPlTitle(title);
+        purchaseListEntity.setPlText(text);
+        purchaseListEntity.setPlType(type);
+        return purchaseListEntity;
+    }
+    public void toSamplePurchaseList(PurchaseListEntity purchaseListEntity){
+        purchaseListEntity.setPlTitle(title);
+        purchaseListEntity.setPlText(text);
+        purchaseListEntity.setPlType(type);
+    }
     //转换成最简公告
     public NoticeEntity toSampleNotice() throws ParseException {
         NoticeEntity noticeEntity = new NoticeEntity();
@@ -39,6 +53,15 @@ public class AbstractNotice {
         if (publishtime != null && publishtime != "")
             noticeEntity.setNPublishtime(new java.sql.Date(format.parse(publishtime).getTime()));
         return noticeEntity;
+    }
+    public void toSampleNotice(NoticeEntity noticeEntity) throws ParseException {
+        SimpleDateFormat format = new SimpleDateFormat(TIME_FORMAT);
+        noticeEntity.setNTitle(title);
+        noticeEntity.setNText(text);
+        noticeEntity.setNType(type);
+        noticeEntity.setNSummary(summary);
+        if (publishtime != null && publishtime != "")
+            noticeEntity.setNPublishtime(new java.sql.Date(format.parse(publishtime).getTime()));
     }
 
     //以下字段用于采购公告
@@ -66,6 +89,20 @@ public class AbstractNotice {
         if (stopTime!=null&&stopTime!="")
             purchaseNoticeEntity.setPnStopTime(new java.sql.Date(format.parse(stopTime).getTime()));
         return purchaseNoticeEntity;
+    }
+    public void toSamplePurchase(PurchaseNoticeEntity purchaseNoticeEntity) throws ParseException {
+        SimpleDateFormat format = new SimpleDateFormat(TIME_FORMAT);
+        purchaseNoticeEntity.setPnTitle(title);
+        purchaseNoticeEntity.setPnText(text);
+        purchaseNoticeEntity.setPnType(type);
+        purchaseNoticeEntity.setPnSummary(summary);
+        purchaseNoticeEntity.setPnPurchaseType(purchaseType);
+        purchaseNoticeEntity.setPnSuppierId(supplierIds);
+        purchaseNoticeEntity.setPnSelectSuppierid(selectSupplierId);
+        if (publishtime != null && publishtime != "")
+            purchaseNoticeEntity.setPnPublishTime(new java.sql.Date(format.parse(publishtime).getTime()));
+        if (stopTime!=null&&stopTime!="")
+            purchaseNoticeEntity.setPnStopTime(new java.sql.Date(format.parse(stopTime).getTime()));
     }
     public String getTitle() {
         return title;

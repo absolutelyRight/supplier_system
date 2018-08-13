@@ -8,7 +8,7 @@ import leap.orm.annotation.Id;
 import leap.orm.annotation.Table;
 import leap.orm.model.Model;
 
-@Table("ARCHIVE")
+@Table(name="ARCHIVE", autoCreate = true)
 public class ArchiveEntity extends Model{
     @Id
     private String AId;

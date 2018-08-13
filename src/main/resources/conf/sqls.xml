@@ -77,12 +77,15 @@
         select * from PURCHASE_NOTICE where  PURCHASE_NOTICE.N_CHECKSTATUS=0 and PURCHASE_NOTICE.N_ISDELETE=0;
     </command>
     <command key="listJoinedSuppliers">
-        select SUPPLIER.* from PURCHASE_NOTICE,ARCHIVE,SUPPLIER where  PURCHASE_NOTICE.PN_ID=:id and PURCHASE_NOTICE.PN_ID=ARCHIVE.PA_ID and ARCHIVE.S_ID=SUPPLIER.S_ID;
+        select SUPPLIER.* from PURCHASE_NOTICE,ARCHIVE,SUPPLIER where  PURCHASE_NOTICE.PN_ID=:id and PURCHASE_NOTICE.PN_ID=ARCHIVE.PA_ID and ARCHIVE.S_ID=SUPPLIER.S_ID and SUPPLIER.S_ISDELETE=0;
     </command>
     <command key="listJoinedArchive">
-        select ARCHIVE.* from PURCHASE_NOTICE,ARCHIVE where PURCHASE_NOTICE.PN_ID=:id and PURCHASE_NOTICE.PN_ID=ARCHIVE.PA_ID;
+        select ARCHIVE.* from PURCHASE_NOTICE,ARCHIVE where PURCHASE_NOTICE.PN_ID=:id and PURCHASE_NOTICE.PN_ID=ARCHIVE.PA_ID and PURCHASE_NOTICE.PN_ISDELETE=0;
     </command>
-    <command key="lookup">
-        select * from PURCHASE_NOTICE where PURCHASE_NOTICE.PN_STOP_TIME &lt; :time;
+    <command key="lookupBeforeEnd">
+        select * from PURCHASE_NOTICE where PURCHASE_NOTICE.PN_STOP_TIME &lt; :time and PURCHASE_NOTICE.PN_ISDELETE=0;
+    </command>
+    <command key="PurchaseList.status">
+        select * from PURCHASE_LIST where PURCHASE_LIST.PL_STATUS =:status and PURCHASE_LIST.PL_IS_DELETE=0;
     </command>
 </sqls>

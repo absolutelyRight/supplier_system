@@ -10,7 +10,7 @@ import java.sql.Date;
 import java.util.Objects;
 
 
-@Table("USER")
+@Table(name="USER", autoCreate = true)
 public class UserEntity extends Model implements UserPrincipal {
     @Id
     private String UId;

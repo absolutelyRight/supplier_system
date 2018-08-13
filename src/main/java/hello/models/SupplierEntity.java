@@ -11,7 +11,7 @@ import leap.orm.annotation.Table;
 import leap.orm.model.Model;
 
 
-@Table("SUPPLIER")
+@Table(name="SUPPLIER", autoCreate = true)
 @ManyToMany(target=SupplierProductEntity.class,joinEntityType=SupplierServiceEntity.class)
 public class SupplierEntity extends Model {
     @Id

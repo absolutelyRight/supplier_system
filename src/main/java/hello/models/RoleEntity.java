@@ -7,7 +7,7 @@ import leap.orm.model.Model;
 
 
 
-@Table("role")
+@Table(name="role", autoCreate = true)
 public class RoleEntity extends Model {
     @Id
     private String RId;
