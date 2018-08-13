@@ -1,20 +1,34 @@
 package hello.controllers;
 
 import hello.api_model.UserLogin;
+
+import java.sql.Date;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import hello.api_model.ServiceResult;
+import hello.api_model.UserInfo;
+import hello.models.AffixEntity;
 import hello.models.SupplierEntity;
+import hello.service.FileService;
 import hello.service.SupplierService;
 import leap.core.annotation.Inject;
+import leap.lang.json.JSON;
 import leap.web.action.ControllerBase;
 import leap.web.annotation.Path;
 import leap.web.annotation.PathParam;
 import leap.web.annotation.http.DELETE;
+import leap.web.annotation.http.GET;
 import leap.web.annotation.http.POST;
 
 public class SupplierController extends ControllerBase {
 
     @Inject
     private SupplierService supplierService;
+    @Inject
+    private FileService fileService;
+	private final int[] EDITABLE_TYPE = new int[] { UserInfo.DEMAND, UserInfo.MANAGER, UserInfo.ROOT };
 
     @POST("login")
     public ServiceResult login(UserLogin input) {
@@ -54,15 +68,100 @@ public class SupplierController extends ControllerBase {
     }
     
     @POST("add")
-    public ServiceResult addSupplier(@PathParam String id){
-    	return supplierService.Remove(id);
+	public ServiceResult addSupplier(SupplierEntity supplier) throws Exception {
+		final UserInfo user = (UserInfo) request().getServletRequest().getSession().getAttribute("user");
+		if (user == null) {
+			return ServiceResult.NOT_LOGIN;
+		}
+		if (Arrays.binarySearch(EDITABLE_TYPE, user.getType()) > -1) {
+			List<AffixEntity> affixes = fileService.uploadFiles(request().getServletRequest());
+			if (!affixes.isEmpty()) {
+				supplier.setSAffix(JSON.encode(affixes.stream().map(a -> a.getId()).collect(Collectors.toList())));
+			}
+			return supplierService.Add(supplier);
+		} else {
+			return ServiceResult.POWER_ERROR;
+		}
+	}
+    
+    @POST("/admin/update")
+	public ServiceResult modifySupplier(SupplierEntity supplier) throws Exception {
+		final UserInfo user = (UserInfo) request().getServletRequest().getSession().getAttribute("user");
+		if (user == null) {
+			return ServiceResult.NOT_LOGIN;
+		}
+		if (Arrays.binarySearch(EDITABLE_TYPE, user.getType()) > -1) {
+			List<AffixEntity> affixes = fileService.uploadFiles(request().getServletRequest());
+			if (!affixes.isEmpty()) {
+				supplier.setSAffix(JSON.encode(affixes.stream().map(a -> a.getId()).collect(Collectors.toList())));
+			}
+			return supplierService.Modify(supplier);
+		} else {
+			return ServiceResult.POWER_ERROR;
+		}
+	}
+
+	@POST("page/{index}")
+	public ServiceResult listSupplierPage(@PathParam int index, String type, String name) {
+		/*final UserInfo user = (UserInfo) request().getServletRequest().getSession().getAttribute("user");
+		if (user == null) {
+			return ServiceResult.NOT_LOGIN;
+		}
+		if (Arrays.binarySearch(EDITABLE_TYPE, user.getType()) > -1) {*/
+			return supplierService.PageSearch(type, name, index, 5);
+		/*} else {
+			return ServiceResult.POWER_ERROR;
+		}*/
+	}
+	
+    @POST("unchecked/{index}")
+    public ServiceResult listUncheckedSupplierPage(@PathParam int index,String name,
+    		Date regTimeInf,Date regTimeSup) {
+    	final UserInfo user = (UserInfo) request().getServletRequest().getSession().getAttribute("user");
+		if (user == null) {
+			return ServiceResult.NOT_LOGIN;
+		}
+		if (Arrays.binarySearch(EDITABLE_TYPE, user.getType()) > -1) {
+			return supplierService.UncheckedPageSearch(name,regTimeInf,regTimeSup, index, 5);
+		} else {
+			return ServiceResult.POWER_ERROR;
+		}
     }
-    @POST("page/{index}")
-    public ServiceResult listSupplierPage(@PathParam int index,String type,String name){
-    	return supplierService.PageSearch(type, name, index, 5);
-    }
-    @DELETE("{id}")
-    public ServiceResult removeSupplier(@PathParam String id){
-    	return supplierService.Remove(id);
-    }
+
+	@DELETE("{id}")
+	public ServiceResult removeSupplier(@PathParam String id) {
+		final UserInfo user = (UserInfo) request().getServletRequest().getSession().getAttribute("user");
+		if (user == null) {
+			return ServiceResult.NOT_LOGIN;
+		}
+		if (Arrays.binarySearch(EDITABLE_TYPE, user.getType()) > -1) {
+			return supplierService.Remove(id);
+		} else
+			return ServiceResult.POWER_ERROR;
+	}
+	
+	@GET("{id}")
+	public ServiceResult getSupplier(@PathParam String id) {
+		final UserInfo user = (UserInfo) request().getServletRequest().getSession().getAttribute("user");
+		if (user == null) {
+			return ServiceResult.NOT_LOGIN;
+		}
+		if (Arrays.binarySearch(EDITABLE_TYPE, user.getType()) > -1) {
+			return supplierService.get(id);
+		} else
+			return ServiceResult.POWER_ERROR;
+	}
+	
+	@GET("check/{id}")
+	public ServiceResult checkSupplier(@PathParam String id,String refuseReason) {
+		final UserInfo user = (UserInfo) request().getServletRequest().getSession().getAttribute("user");
+		if (user == null) {
+			return ServiceResult.NOT_LOGIN;
+		}
+		if (Arrays.binarySearch(EDITABLE_TYPE, user.getType()) > -1) {
+			return supplierService.check(id, refuseReason);
+		} else
+			return ServiceResult.POWER_ERROR;
+	}
+	
 }

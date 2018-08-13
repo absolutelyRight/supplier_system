@@ -54,6 +54,7 @@ public class SupplierEntity extends Model {
     private String SAccountName;
     @Column
     private String SAffix;
+    @Column
     private Date SCheckTime;
     @Column
     private Date SStartTime;

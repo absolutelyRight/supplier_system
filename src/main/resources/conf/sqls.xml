@@ -1,10 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sqls xmlns="http://www.leapframework.org/schema/sqls">
     <command key="supplier.all">
-        select SUPPLIER.*,SUPPLIER_PRODUCT.sp_id,SUPPLIER_PRODUCT.SP_TYPE_NAME from SUPPLIER,SUPPLIER_PRODUCT,SUPPLIER_SERVICE where
-        SUPPLIER.s_id=SUPPLIER_SERVICE.s_id and SUPPLIER_SERVICE.sp_id=SUPPLIER_PRODUCT.sp_id
-        {? and SUPPLIER.s_full_name =#name#}
-        {? and SUPPLIER.s_id in(select SUPPLIER_SERVICE.s_id from SUPPLIER_SERVICE where SUPPLIER_SERVICE.sp_id in $type$});
+        select SUPPLIER.S_ID,SUPPLIER.S_FULL_NAME,SUPPLIER.S_REGIST_TIME,
+        SUPPLIER_PRODUCT.sp_id,SUPPLIER_PRODUCT.SP_TYPE_NAME,SUPPLIER_PRODUCT.D_PARENT_CODE,
+        SUPPLIER_PRODUCT.D_LEVEL_CODE,
+        EVALUATION.e_id,EVALUATION.E_TOTAL
+        from SUPPLIER
+		join SUPPLIER_SERVICE on SUPPLIER.s_id=SUPPLIER_SERVICE.s_id
+		join SUPPLIER_PRODUCT on SUPPLIER_SERVICE.sp_id=SUPPLIER_PRODUCT.sp_id
+		left join EVALUATION on SUPPLIER.s_id=EVALUATION.e_id
+		where 1=1
+        {? and SUPPLIER.s_full_name like concat('%',#name#,'%')}
+        {? and SUPPLIER.s_id in(select SUPPLIER_SERVICE.s_id from SUPPLIER_SERVICE
+			where SUPPLIER_SERVICE.sp_id =#type#)};
+    </command>
+    <command key="supplier.unchecked">
+        select SUPPLIER.S_ID,SUPPLIER.S_FULL_NAME,SUPPLIER.S_REGIST_TIME,
+        SUPPLIER.S_SOCIAL_CREDIT_CODE,SUPPLIER.S_URL,
+        SUPPLIER_PRODUCT.sp_id,SUPPLIER_PRODUCT.SP_TYPE_NAME,SUPPLIER_PRODUCT.D_PARENT_CODE,
+        SUPPLIER_PRODUCT.D_LEVEL_CODE
+        from SUPPLIER,SUPPLIER_PRODUCT,SUPPLIER_SERVICE,
+		where SUPPLIER.S_CHECK_STATUS=1 
+        and SUPPLIER.s_id=SUPPLIER_SERVICE.s_id and SUPPLIER_SERVICE.sp_id=SUPPLIER_PRODUCT.sp_id
+        {? and SUPPLIER.s_full_name like '%'+#name#+'%'}
+        {? and SUPPLIER.S_REGIST_TIME &lt;#regTimeInf#}
+        {? and SUPPLIER.S_REGIST_TIME &gt;#regTimeSup#}
     </command>
     <command key="supplier.products">
         select SUPPLIER_PRODUCT.* from SUPPLIER_PRODUCT,SUPPLIER_SERVICE where SUPPLIER_SERVICE.s_id =:id and

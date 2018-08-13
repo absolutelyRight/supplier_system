@@ -1,8 +1,10 @@
 package hello.service;
 
+import java.sql.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,7 +13,6 @@ import hello.api_model.UserLogin;
 import hello.models.SupplierEntity;
 import hello.util.CommonTool;
 import leap.core.annotation.Bean;
-import leap.lang.json.JSON;
 import leap.orm.query.PageResult;
 
 @Bean
@@ -39,7 +40,7 @@ public class SupplierService {
             output.setMsg(UserService.USER_NOT_EXIST);
             return output;
         }
-        if (!supplier.getSPassword().equals(input.getPassword())) {
+        if (!supplier.getSPassword().equals(DigestUtils.md5Hex(input.getPassword()))) {
             //用户密码不匹配
             output.setCode(401);
             output.setMsg(UserService.USER_ERROR);
@@ -96,29 +97,125 @@ public class SupplierService {
         return new ServiceResult(200,"",futureSupplier);
     }
     
-    public ServiceResult Remove(String id) {
-        SupplierEntity user = SupplierEntity.findOrNull(id);
-        //删除某用户，竟然发现为空！
-        if (user == null) {
-            return ServiceResult.NOT_FOUND;
-        }
-        //逻辑删除
-        user.setSIsdelete(1);
-        user.save();
-        return ServiceResult.SUCCESS;
-    }
-    public ServiceResult PageSearch(String type,String name,int index,int pageSize) {
-    	String key="supplier.all";
-        PageResult<SupplierEntity> page=SupplierEntity.<SupplierEntity>query(key)
-        		.param("name", name).param("type", type!=null&&type.matches("{(\\d+,)*\\d+}")?type:null)
-        		.pageResult(index, pageSize);
-        Map<String,Object> pageObj=new HashMap<>(4);
-        pageObj.put("page",page);
-        pageObj.put("list",page.list());
-        System.out.println(page.list().get(0).toString());
-        System.out.println(JSON.encode(page.list().get(0)));
-        System.out.println(page.list().get(0).getClass().getName());
-//        noticeEntities.forEach(v->{v.setNCheckuid("");v.setNStartuid("");v.setNUpdateuid("");});
-        return new ServiceResult(200,"",pageObj);
-    }
+	public ServiceResult Remove(String id) {
+		SupplierEntity user = SupplierEntity.findOrNull(id);
+		if (user == null) {
+			return ServiceResult.NOT_FOUND;
+		}
+		// 逻辑删除
+		user.setSIsdelete(1);
+		user.save();
+		return ServiceResult.SUCCESS;
+	}
+
+	public ServiceResult Add(SupplierEntity supplier) {
+		final ServiceResult result = SupplierIsNotExist(supplier.getSEmail());
+		if (result.getCode() == 200) {
+			SupplierEntity record = new SupplierEntity();
+			record.setSId(CommonTool.getIdUUID(SupplierEntity.class.getName()));
+			record.setSCheckStatus(2);
+			record.setSCheckTime(new Date(new java.util.Date().getTime()));
+			record.setSIsdelete(0);
+
+			record.setSAffix(supplier.getSAffix());
+			record.setSAbility(supplier.getSAbility());
+			record.setSAccountName(supplier.getSAccountName());
+			record.setSFax(supplier.getSFax());
+			record.setSFullName(supplier.getSFullName());
+			record.setSShortName(supplier.getSShortName());
+			record.setSUrl(supplier.getSUrl());
+			record.setSPassword(DigestUtils.md5Hex(supplier.getSPassword()));
+			record.setSPhone(supplier.getSPhone());
+			record.setSAddress(supplier.getSAddress());
+			record.setSPhone(supplier.getSPhone());
+			record.setSDeputy(supplier.getSDeputy());
+			record.setSEmail(supplier.getSEmail());
+			record.setSContact(supplier.getSContact());
+			supplier.save();
+			return ServiceResult.SUCCESS;
+		} else
+			return result;
+	}
+	
+	public ServiceResult Modify(SupplierEntity supplier) {
+		if (supplier.getSId() == null)
+			return ServiceResult.NOT_FOUND;
+		final ServiceResult result = SupplierIsNotExist(supplier.getSEmail());
+		if (result.getCode() == 200) {
+			SupplierEntity record = new SupplierEntity();
+			record.setSCheckStatus(2);
+			record.setSCheckTime(new Date(new java.util.Date().getTime()));
+
+			record.setSAffix(supplier.getSAffix());
+			record.setSAbility(supplier.getSAbility());
+			record.setSAccountName(supplier.getSAccountName());
+			record.setSFax(supplier.getSFax());
+			record.setSFullName(supplier.getSFullName());
+			record.setSShortName(supplier.getSShortName());
+			record.setSUrl(supplier.getSUrl());
+			record.setSPassword(DigestUtils.md5Hex(supplier.getSPassword()));
+			record.setSPhone(supplier.getSPhone());
+			record.setSAddress(supplier.getSAddress());
+			record.setSPhone(supplier.getSPhone());
+			record.setSDeputy(supplier.getSDeputy());
+			record.setSEmail(supplier.getSEmail());
+			record.setSContact(supplier.getSContact());
+			supplier.save();
+			return ServiceResult.SUCCESS;
+		} else
+			return result;
+	}
+    
+	public ServiceResult PageSearch(String type, String name, int index, int pageSize) {
+		String key = "supplier.all";
+		PageResult<SupplierEntity> page = SupplierEntity.<SupplierEntity>query(key).param("name", name)
+				.param("type",type)
+				.pageResult(index, pageSize);
+		Map<String, Object> pageObj = new HashMap<>(4);
+		pageObj.put("page", page);
+		pageObj.put("list", page.list());
+		return new ServiceResult(200, "", pageObj);
+	}
+
+	public ServiceResult UncheckedPageSearch(String name,Date regTimeInf,Date regTimeSup, int index, int pageSize) {
+		String key = "supplier.unchecked";
+		PageResult<SupplierEntity> page = SupplierEntity.<SupplierEntity>query(key)
+				.param("name", name)
+				.param("regTimeInf", regTimeInf)
+				.param("naregTimeSupme", regTimeSup)
+				.pageResult(index, pageSize);
+		Map<String, Object> pageObj = new HashMap<>(4);
+		pageObj.put("page", page);
+		pageObj.put("list", page.list());
+		return new ServiceResult(200, "", pageObj);
+	}
+	
+	public ServiceResult get(String id){
+		SupplierEntity supplier = SupplierEntity.findOrNull(id);
+		if(supplier==null)
+			return ServiceResult.NOT_FOUND;
+		else{
+			supplier.setSPassword(null);
+			return new ServiceResult(200, null, supplier);
+		}
+	}
+	
+	public ServiceResult check(String id,String refuseReason){
+		SupplierEntity supplier = SupplierEntity.findOrNull(id);
+		if(supplier==null||supplier.getSCheckStatus().intValue()!=1)
+			return ServiceResult.NOT_FOUND;
+		else{
+			SupplierEntity record=new SupplierEntity();
+			record.setSId(id);
+			if(refuseReason==null){
+				record.setSCheckStatus(2);
+			}
+			else{
+				record.setSCheckStatus(3);
+				record.setSReason(refuseReason);
+			}
+			record.save();
+			return ServiceResult.SUCCESS;
+		}
+	}
 }
