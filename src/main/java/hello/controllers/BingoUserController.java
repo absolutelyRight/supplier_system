@@ -1,8 +1,12 @@
 package hello.controllers;
 
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+
+import hello.api_model.ServiceResult;
 import hello.api_model.UserInfo;
 import hello.api_model.UserLogin;
-import hello.api_model.ServiceResult;
 import hello.models.AffixEntity;
 import hello.models.UserEntity;
 import hello.service.FileService;
@@ -14,11 +18,6 @@ import leap.web.annotation.Path;
 import leap.web.annotation.http.GET;
 import leap.web.annotation.http.POST;
 import leap.web.download.FileDownload;
-
-import javax.servlet.http.HttpServletRequest;
-import java.util.List;
-
-import static hello.api_model.ServiceResult.ERROR_RESULT;
 
 
 @Path("bingouser")
@@ -83,7 +82,7 @@ public class BingoUserController extends ControllerBase {
 
     @Path("user/remove")
     public ServiceResult removeUser(String id) {
-        final UserInfo user = (UserInfo) request().getServletRequest().getSession().getAttribute("user");
+        /*final UserInfo user = (UserInfo) request().getServletRequest().getSession().getAttribute("user");
         if (user == null) {
             return ServiceResult.NOT_LOGIN;
         }
@@ -91,7 +90,7 @@ public class BingoUserController extends ControllerBase {
         if (user.getType() == 10 || user.getType() == 8)
             return userService.UpdateUser(userEntity);
         else
-            return ServiceResult.POWER_ERROR;
+            return ServiceResult.POWER_ERROR;*/
         return userService.RemoveUser(id);
     }
 

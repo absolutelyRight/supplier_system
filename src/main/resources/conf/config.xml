@@ -6,10 +6,16 @@
         <!--<property name="jdbc.username">root</property>-->
         <!--<property name="jdbc.password">123456</property>-->
     <!--</properties>-->
-    <properties>
+    <!-- <properties>
         <property name="jdbc.driverClassName">com.mysql.jdbc.Driver</property>
         <property name="jdbc.url">jdbc:mysql://192.168.43.122:3306/supplier</property>
         <property name="jdbc.username">debian-sys-maint</property>
         <property name="jdbc.password">2XuUS1WTrQewjb0L</property>
+    </properties> -->
+    <properties>
+        <property name="jdbc.driverClassName">com.mysql.jdbc.Driver</property>
+        <property name="jdbc.url">jdbc:mysql://localhost:3306/absolute_right</property>
+        <property name="jdbc.username">root</property>
+        <property name="jdbc.password"></property>
     </properties>
 </config>
