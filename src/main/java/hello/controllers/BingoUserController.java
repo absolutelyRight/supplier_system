@@ -27,6 +27,12 @@ public class BingoUserController extends ControllerBase {
     @Inject
     private SupplierService supplierService;
 
+    public BingoUserController() {
+        this.userService = new UserService();
+        this.fileService = new FileService();
+        this.supplierService = new SupplierService();
+    }
+
     @POST("login")
     public ServiceResult login(UserLogin input) {
 

@@ -10,8 +10,11 @@ import leap.web.annotation.Path;
 
 public class SupplierProductController extends ControllerBase {
 
-    @Inject
     private SupplierProductService supplierProductService;
+
+    public SupplierProductController() {
+        this.supplierProductService = new SupplierProductService();
+    }
 
     @Path("get_products")
     public ServiceResult getAllProduct() {

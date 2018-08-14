@@ -13,10 +13,13 @@ import leap.web.annotation.Path;
 import java.util.List;
 
 public class SupplierPurchaseNoticeController extends ControllerBase {
-    @Inject
     private SupplierPurchaseNoticeService supplierPurchaseNoticeService;
-    @Inject
     private FileService fileService;
+
+    public SupplierPurchaseNoticeController() {
+        this.supplierPurchaseNoticeService = new SupplierPurchaseNoticeService();
+        this.fileService = new FileService();
+    }
 
     //查看参与过的投标
     @Path("joined")

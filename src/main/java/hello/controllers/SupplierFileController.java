@@ -17,6 +17,10 @@ public class SupplierFileController extends ControllerBase {
     @Inject
     FileService fileService;
 
+    public SupplierFileController() {
+        this.fileService = new FileService();
+    }
+
     //fixme 上传文件的检查
     @Path("upload")
     public ServiceResult uploadFile() {

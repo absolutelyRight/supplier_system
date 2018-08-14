@@ -13,6 +13,10 @@ public class PurchaseListController extends ControllerBase {
     @Inject
     private PurchaseListService purchaseListService;
 
+    public PurchaseListController() {
+        this.purchaseListService = new PurchaseListService();
+    }
+
     @Path("create")
     public ServiceResult create(AbstractNotice abstractNotice) {
         final UserInfo user = (UserInfo) request().getServletRequest().getSession().getAttribute("user");

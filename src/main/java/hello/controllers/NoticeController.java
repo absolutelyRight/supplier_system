@@ -9,12 +9,16 @@ import leap.core.annotation.Inject;
 import leap.web.action.ControllerBase;
 import leap.web.annotation.Path;
 import leap.web.annotation.http.POST;
-import org.omg.CORBA.PUBLIC_MEMBER;
 
 public class NoticeController extends ControllerBase {
     //用于处理公告的控制器
     @Inject
     private NoticeService noticeService;
+
+    public NoticeController() {
+        this.noticeService =new NoticeService();
+    }
+
     @POST("create")
     public ServiceResult create(AbstractNotice abstractNotice){
         final UserInfo user = (UserInfo) request().getServletRequest().getSession().getAttribute("user");
@@ -24,6 +28,10 @@ public class NoticeController extends ControllerBase {
         //需求经理不能创建公告
         if (user.getType() == UserInfo.DEMAND)
             return ServiceResult.POWER_ERROR;
+        System.out.println(abstractNotice.toString());
+        if (noticeService==null){
+            return ServiceResult.ERROR_RESULT;
+        }
         return noticeService.addNotice(abstractNotice,user);
     }
     //审核

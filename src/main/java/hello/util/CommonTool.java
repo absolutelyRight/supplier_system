@@ -3,6 +3,8 @@ package hello.util;
 import java.util.UUID;
 
 public class CommonTool {
+    //时间需与前端统一数据格式
+    public static final String TIME_FORMAT="yyyy-MM-dd";
     static public String getBingoLoginTableName(String str){
         //邮箱登录
         if (str.matches("[a-zA-Z0-9_]+@[a-zA-Z0-9_]+(\\.[a-zA-Z0-9_]+)+"))
@@ -21,6 +23,7 @@ public class CommonTool {
     }
     static public String getIdUUID(String name){
         UUID uuid = UUID.randomUUID();
-        return name+"-"+uuid.toString();
+        name=name.substring(0,name.indexOf("E"));
+        return name+"-"+uuid.toString().substring(0,10);
     }
 }

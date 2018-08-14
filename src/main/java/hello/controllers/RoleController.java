@@ -11,6 +11,11 @@ import leap.web.annotation.Path;
 public class RoleController extends ControllerBase {
     @Inject
     private RoleService roleService;
+
+    public RoleController() {
+        this.roleService = new RoleService();
+    }
+
     @Path("list")
     public ServiceResult getAllRole(){
         final UserInfo user = (UserInfo) request().getServletRequest().getSession().getAttribute("user");

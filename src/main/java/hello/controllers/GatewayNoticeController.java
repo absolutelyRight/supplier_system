@@ -11,6 +11,10 @@ public class GatewayNoticeController extends ControllerBase {
     //本控制器用于返回门户界面的公告信息
     @Inject
     private InformationService informationService;
+
+    public GatewayNoticeController() {
+        this.informationService = new InformationService();
+    }
     //用于返回目前普通公告信息
     @Path("common")
     public ServiceResult common() {

@@ -15,6 +15,11 @@ public class PurchaseNoticeController extends ControllerBase {
     //审核
     @Inject
     private PurchaseNoticeService purchaseNoticeService;
+
+    public PurchaseNoticeController() {
+        this.purchaseNoticeService = new PurchaseNoticeService();
+    }
+
     @POST("create")
     public ServiceResult create(AbstractNotice abstractNotice){
         final UserInfo user = (UserInfo) request().getServletRequest().getSession().getAttribute("user");

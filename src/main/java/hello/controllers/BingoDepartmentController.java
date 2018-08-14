@@ -11,6 +11,11 @@ import leap.web.annotation.Path;
 public class BingoDepartmentController  extends ControllerBase {
     @Inject
     BingoDepartmentService bingoDepartmentService;
+
+    public BingoDepartmentController() {
+        this.bingoDepartmentService = new BingoDepartmentService();
+    }
+
     //添加部门
     @Path("add")
     public ServiceResult add(DepartmentEntity departmentEntity){

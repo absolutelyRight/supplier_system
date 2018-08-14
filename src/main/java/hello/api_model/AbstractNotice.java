@@ -3,6 +3,7 @@ package hello.api_model;
 import hello.models.NoticeEntity;
 import hello.models.PurchaseListEntity;
 import hello.models.PurchaseNoticeEntity;
+import hello.util.CommonTool;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -18,9 +19,6 @@ public class AbstractNotice {
     private String summary;
     //公告类型
     private Integer type;
-
-    //时间需与前端统一数据格式
-    public static final String TIME_FORMAT="yyyy-MM-dd";
     //发布时间
     private String publishtime;
     //审核状态，能不能通过审核
@@ -45,7 +43,7 @@ public class AbstractNotice {
     //转换成最简公告
     public NoticeEntity toSampleNotice() throws ParseException {
         NoticeEntity noticeEntity = new NoticeEntity();
-        SimpleDateFormat format = new SimpleDateFormat(TIME_FORMAT);
+        SimpleDateFormat format = new SimpleDateFormat(CommonTool.TIME_FORMAT);
         noticeEntity.setNTitle(title);
         noticeEntity.setNText(text);
         noticeEntity.setNType(type);
@@ -55,7 +53,7 @@ public class AbstractNotice {
         return noticeEntity;
     }
     public void toSampleNotice(NoticeEntity noticeEntity) throws ParseException {
-        SimpleDateFormat format = new SimpleDateFormat(TIME_FORMAT);
+        SimpleDateFormat format = new SimpleDateFormat(CommonTool.TIME_FORMAT);
         noticeEntity.setNTitle(title);
         noticeEntity.setNText(text);
         noticeEntity.setNType(type);
@@ -76,7 +74,7 @@ public class AbstractNotice {
 
     public PurchaseNoticeEntity toSamplePurchase() throws ParseException {
         PurchaseNoticeEntity purchaseNoticeEntity = new PurchaseNoticeEntity();
-        SimpleDateFormat format = new SimpleDateFormat(TIME_FORMAT);
+        SimpleDateFormat format = new SimpleDateFormat(CommonTool.TIME_FORMAT);
         purchaseNoticeEntity.setPnTitle(title);
         purchaseNoticeEntity.setPnText(text);
         purchaseNoticeEntity.setPnType(type);
@@ -91,7 +89,7 @@ public class AbstractNotice {
         return purchaseNoticeEntity;
     }
     public void toSamplePurchase(PurchaseNoticeEntity purchaseNoticeEntity) throws ParseException {
-        SimpleDateFormat format = new SimpleDateFormat(TIME_FORMAT);
+        SimpleDateFormat format = new SimpleDateFormat(CommonTool.TIME_FORMAT);
         purchaseNoticeEntity.setPnTitle(title);
         purchaseNoticeEntity.setPnText(text);
         purchaseNoticeEntity.setPnType(type);
@@ -207,5 +205,24 @@ public class AbstractNotice {
 
     public void setSelectSupplierId(String selectSupplierId) {
         this.selectSupplierId = selectSupplierId;
+    }
+
+    @Override
+    public String toString() {
+        return "AbstractNotice{" +
+                "id='" + id + '\'' +
+                ", title='" + title + '\'' +
+                ", text='" + text + '\'' +
+                ", summary='" + summary + '\'' +
+                ", type=" + type +
+                ", publishtime='" + publishtime + '\'' +
+                ", checksStatus=" + checksStatus +
+                ", reason='" + reason + '\'' +
+                ", isDelete=" + isDelete +
+                ", stopTime='" + stopTime + '\'' +
+                ", purchaseType=" + purchaseType +
+                ", supplierIds='" + supplierIds + '\'' +
+                ", selectSupplierId='" + selectSupplierId + '\'' +
+                '}';
     }
 }

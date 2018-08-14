@@ -30,7 +30,12 @@ public class SupplierController extends ControllerBase {
     private FileService fileService;
 	private final int[] EDITABLE_TYPE = new int[] { UserInfo.DEMAND, UserInfo.MANAGER, UserInfo.ROOT };
 
-    @POST("login")
+	public SupplierController() {
+		this.supplierService = new SupplierService();
+		this.fileService = new FileService();
+	}
+
+	@POST("login")
     public ServiceResult login(UserLogin input) {
         //邮箱，用户ID都可以登陆
         final ServiceResult output = supplierService.SupplierLogin(input);

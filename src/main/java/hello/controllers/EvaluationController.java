@@ -12,6 +12,11 @@ public class EvaluationController extends ControllerBase {
     //用于处理评价的控制器
     @Inject
     private EvaluationService evaluationService;
+
+    public EvaluationController() {
+        this.evaluationService = new EvaluationService();
+    }
+
     @Path("create")
     public ServiceResult create(EvaluationEntity evaluationEntity){
         final UserInfo user = (UserInfo) request().getServletRequest().getSession().getAttribute("user");

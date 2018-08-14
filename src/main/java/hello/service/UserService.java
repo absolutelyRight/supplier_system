@@ -55,7 +55,7 @@ public class UserService {
             output.setMsg(USER_AUDIT);
         }
         final String key = "userGetRole";
-        RoleEntity roleEntity = UserRoleEntity.<RoleEntity>query(key).param("id", user.getUId()).first();
+        RoleEntity roleEntity = RoleEntity.<RoleEntity>query(key).param("id", user.getUId()).first();
         final String key2 = "userGetDepartment";
         List<DepartmentEntity> departmentEntitys = DepartmentEntity.<DepartmentEntity>query(key2).param("id", user.getUId()).list();
         if (departmentEntitys == null || departmentEntitys.isEmpty()) {

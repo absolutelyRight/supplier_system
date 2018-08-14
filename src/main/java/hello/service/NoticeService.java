@@ -22,6 +22,7 @@ public class NoticeService {
             noticeEntity.setNIsdelete(0);
             if(noticeEntity.create()==null)
                 return ServiceResult.DB_ERROR;
+            System.out.println("addNotice3");
             return new ServiceResult(200,"",noticeEntity);
         } catch (ParseException e) {
             e.printStackTrace();
