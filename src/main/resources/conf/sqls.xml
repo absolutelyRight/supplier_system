@@ -9,7 +9,7 @@
 		join SUPPLIER_SERVICE on SUPPLIER.s_id=SUPPLIER_SERVICE.s_id
 		join SUPPLIER_PRODUCT on SUPPLIER_SERVICE.sp_id=SUPPLIER_PRODUCT.sp_id
 		left join EVALUATION on SUPPLIER.s_id=EVALUATION.e_id
-		where 1=1
+		where SUPPLIER.S_ISDELETE=0
         {? and SUPPLIER.s_full_name like concat('%',#name#,'%')}
         {? and SUPPLIER.s_id in(select SUPPLIER_SERVICE.s_id from SUPPLIER_SERVICE
 			where SUPPLIER_SERVICE.sp_id =#type#)};
@@ -20,7 +20,7 @@
         SUPPLIER_PRODUCT.sp_id,SUPPLIER_PRODUCT.SP_TYPE_NAME,SUPPLIER_PRODUCT.D_PARENT_CODE,
         SUPPLIER_PRODUCT.D_LEVEL_CODE
         from SUPPLIER,SUPPLIER_PRODUCT,SUPPLIER_SERVICE,
-		where SUPPLIER.S_CHECK_STATUS=1 
+		where SUPPLIER.S_CHECK_STATUS=1 and SUPPLIER.S_ISDELETE=0
         and SUPPLIER.s_id=SUPPLIER_SERVICE.s_id and SUPPLIER_SERVICE.sp_id=SUPPLIER_PRODUCT.sp_id
         {? and SUPPLIER.s_full_name like '%'+#name#+'%'}
         {? and SUPPLIER.S_REGIST_TIME &lt;#regTimeInf#}

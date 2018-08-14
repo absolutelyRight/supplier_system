@@ -114,7 +114,8 @@ public class SupplierService {
 			SupplierEntity record = new SupplierEntity();
 			record.setSId(CommonTool.getIdUUID(SupplierEntity.class.getName()));
 			record.setSCheckStatus(2);
-			record.setSCheckTime(new Date(new java.util.Date().getTime()));
+			Date now = new Date(new java.util.Date().getTime());
+			record.setSCheckTime(now);
 			record.setSIsdelete(0);
 
 			record.setSAffix(supplier.getSAffix());
@@ -131,6 +132,7 @@ public class SupplierService {
 			record.setSDeputy(supplier.getSDeputy());
 			record.setSEmail(supplier.getSEmail());
 			record.setSContact(supplier.getSContact());
+			record.setSRegistTime(now);
 			record.save();
 			return ServiceResult.SUCCESS;
 		} else
@@ -183,7 +185,7 @@ public class SupplierService {
 		PageResult<SupplierEntity> page = SupplierEntity.<SupplierEntity>query(key)
 				.param("name", name)
 				.param("regTimeInf", regTimeInf)
-				.param("naregTimeSupme", regTimeSup)
+				.param("regTimeSup", regTimeSup)
 				.pageResult(index, pageSize);
 		Map<String, Object> pageObj = new HashMap<>(4);
 		pageObj.put("page", page);
