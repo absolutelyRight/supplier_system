@@ -131,7 +131,7 @@ public class SupplierService {
 			record.setSDeputy(supplier.getSDeputy());
 			record.setSEmail(supplier.getSEmail());
 			record.setSContact(supplier.getSContact());
-			supplier.save();
+			record.save();
 			return ServiceResult.SUCCESS;
 		} else
 			return result;
@@ -153,14 +153,15 @@ public class SupplierService {
 			record.setSFullName(supplier.getSFullName());
 			record.setSShortName(supplier.getSShortName());
 			record.setSUrl(supplier.getSUrl());
-			record.setSPassword(DigestUtils.md5Hex(supplier.getSPassword()));
+			if(supplier.getSPassword()!=null&&supplier.getSPassword().length()>0)
+				record.setSPassword(DigestUtils.md5Hex(supplier.getSPassword()));
 			record.setSPhone(supplier.getSPhone());
 			record.setSAddress(supplier.getSAddress());
 			record.setSPhone(supplier.getSPhone());
 			record.setSDeputy(supplier.getSDeputy());
 			record.setSEmail(supplier.getSEmail());
 			record.setSContact(supplier.getSContact());
-			supplier.save();
+			record.save();
 			return ServiceResult.SUCCESS;
 		} else
 			return result;
@@ -207,13 +208,14 @@ public class SupplierService {
 		else{
 			SupplierEntity record=new SupplierEntity();
 			record.setSId(id);
-			if(refuseReason==null){
+			if(refuseReason==null||refuseReason.length()==0){
 				record.setSCheckStatus(2);
 			}
 			else{
 				record.setSCheckStatus(3);
 				record.setSReason(refuseReason);
 			}
+			record.setSCheckTime(new Date(new java.util.Date().getTime()));
 			record.save();
 			return ServiceResult.SUCCESS;
 		}
