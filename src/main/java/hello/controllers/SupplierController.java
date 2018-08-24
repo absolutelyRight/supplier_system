@@ -52,8 +52,8 @@ public class SupplierController extends ControllerBase {
     }
 
     @POST("register")
-    public ServiceResult registerSupplier(SupplierEntity supplierEntity) {
-        final ServiceResult output=supplierService.SupplierRegister(supplierEntity);
+    public ServiceResult registerSupplier(SupplierEntity supplierEntity,String verifyCode) {
+        final ServiceResult output=supplierService.SupplierRegister(supplierEntity,verifyCode);
         if (output.getCode()==200){
             request().getServletRequest().getSession().setAttribute("supplier", output.getBusinessObject());
         }

@@ -1,24 +1,33 @@
 package hello.service;
 
 import java.sql.Date;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.collect.MapMaker;
+
 import hello.api_model.ServiceResult;
 import hello.api_model.UserLogin;
 import hello.models.SupplierEntity;
 import hello.util.CommonTool;
+import hello.util.MailHepler;
 import leap.core.annotation.Bean;
 import leap.orm.query.PageResult;
 
 @Bean
 public class SupplierService {
     private Logger log;
-
+    private Map<String,String> verifyCodeCache=new MapMaker().concurrencyLevel(32).expiration(60, TimeUnit.SECONDS).makeMap();
+	private MailHepler mailHelper = new MailHepler("smtp.163.com", "Jacksoh@163.com").setAuth("Jacksoh@163.com", "smtpat163");
+    private Random random = new Random();
+		
     public SupplierService() {
         log = LoggerFactory.getLogger(this.getClass());
     }
@@ -50,15 +59,55 @@ public class SupplierService {
         output.setBusinessObject(supplier);
         return output;
     }
-
-    public ServiceResult SupplierRegister(SupplierEntity supplier){
+    
+    /**
+     * 
+     * @param email
+     * @return {code:400,msg:"邮箱格式不正确"} when email format error<br>
+     * {code:500} when email send error<br>
+     * {code:200} when success
+     */
+	public ServiceResult SendMailVerifyCode(String email) {
+		if (!CommonTool.isEmil(email)) {
+			return new ServiceResult(400, "邮箱格式不正确", null);
+		}
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < 6; i++) {
+			sb.append(random.nextInt(10));
+		}
+		String code = sb.toString();
+		String errMsg = mailHelper.send("供应商平台", Arrays.asList(email), "注册验证码", "您的邮箱验证码为" + code + ",请不要泄露。");
+		if (errMsg == null) {
+			verifyCodeCache.put(email, code);
+			return ServiceResult.SUCCESS;
+		} else {
+			return new ServiceResult(500);
+		}
+	}
+    
+	/**
+	 * 
+	 * @param supplier
+	 * @param verifyCode
+	 * @return {code:404,msg:"验证码错误或已失效"} when email verify fail<br>
+     * {code:500} when save error<br>
+     * {code:200} when success
+	 */
+    public ServiceResult SupplierRegister(SupplierEntity supplier,String verifyCode){
         final ServiceResult result=SupplierIsNotExist(supplier.getSEmail());
         if (result.getCode()==200){
+        	String code = verifyCodeCache.get(supplier.getSEmail());
+			if(code==null||!code.equals(verifyCode)){
+				result.setCode(404);
+                result.setMsg("验证码错误或已失效");
+                return result;
+			}
             supplier.setSId(CommonTool.getIdUUID(SupplierEntity.class.getName()));
             supplier.setSCheckStatus(0);
 
             final SupplierEntity supplierEntity=supplier.save();
             if(supplierEntity!=null){
+            	supplierEntity.setSPassword(null);
                 result.setBusinessObject(supplierEntity);
             }else {
                 result.setCode(500);

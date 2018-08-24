@@ -152,13 +152,11 @@ public class MailHepler {
 	 *            主题
 	 * @param content
 	 *            内容 html
-	 * @return {state:success/failed,message}
+	 * @return null if sucess or errMsg when fail
 	 * @throws MessagingException
 	 */
-	public HashMap<String, String> send(String displayName, List<String> to, String subject, String content) {
-		HashMap<String, String> map = new HashMap<String, String>();
-		map.put("state", "success");
-		String message = "�ʼ����ͳɹ���";
+	public String send(String displayName, List<String> to, String subject, String content) {
+		String message = null;
 		Session session = null;
 		Properties props = new Properties();
 		props.put("mail.smtp.host", smtpServer);
@@ -223,21 +221,19 @@ public class MailHepler {
 			trans.close();
 
 		} catch (AuthenticationFailedException e) {
-			map.put("state", "failed");
 			message = "发送失败\n" + "邮箱验证失败!";
 			e.printStackTrace();
 		} catch (MessagingException e) {
 			message = "发送失败\n" + e.getMessage();
-			map.put("state", "failed");
 			e.printStackTrace();
 			Exception ex = null;
 			if ((ex = e.getNextException()) != null) {
 				System.out.println(ex.toString());
+				message +='\n' + ex.toString();
 				ex.printStackTrace();
 			}
 		}
-		map.put("message", message);
-		return map;
+		return message;
 	}
 
 	public static void main(String[] args) {
